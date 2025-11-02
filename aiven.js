@@ -38,7 +38,8 @@ app.use(express.json());
 
 // Configuración CORS
 app.use(cors({
-    origin: '*', // Permitir cualquier origen (solo para desarrollo, ¡ajustar en producción!)
+    // Permite solicitudes de tu dominio (importante incluir http://)
+    origin: 'http://hirustafibrofacil.com.ar', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
