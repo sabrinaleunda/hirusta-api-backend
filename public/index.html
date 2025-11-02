@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hirusta Fibrofacil</title>
+    <link rel="shortcut icon" href="img/hir.ico" type="image/x-icon">
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #E91E63;
+            /* Magenta de la marca */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+            /* Importante para que el fondo se vea */
+        }
+
+        /* 💡 ESTILO DEL FONDO DE PANTALLA FIJO */
+        #capa-fondo-atenuante {
+            position: fixed;
+            /* Fija la capa para que cubra la pantalla */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Envía la capa detrás de todo el contenido */
+
+            /* 💡 APLICAR PATRÓN Y TAMAÑO */
+            /* Usamos la ruta relativa 'img/fondo hiru.jpg' ajustada al contexto */
+            background-image: url('img/fondo hiru.jpg');
+            background-repeat: repeat;
+            background-size: 950px;
+            /* <--- AJUSTA ESTE TAMAÑO */
+
+            /* 💡 APLICAR ATENUACIÓN */
+            opacity: 0.5;
+            /* <--- AJUSTA ESTE VALOR (0.1 es muy sutil, 0.5 es notable) */
+        }
+
+        /* 💡 ESTILOS PARA EL LOGO */
+        .logo-container {
+            /* Usamos flex para alinear el logo y el H1 */
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .logo {
+            max-height: 200px;
+            /* Tamaño más grande para mayor impacto */
+            width: auto;
+            /* Añadimos un pequeño margen derecho para separar del texto H1 */
+            margin-right: 1rem;
+        }
+
+
+        /* Estilo para imágenes dentro de las tarjetas de producto */
+        .product-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Estilos específicos para el modal del carrito */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* ---------------------------------------------------- */
+        /* 💡 NUEVOS ESTILOS COMPLETOS DEL FOOTER (Hot Pink) */
+        /* ---------------------------------------------------- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background-color: #FF69B4;
+            /* Hot Pink */
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .redes-sociales {
+            margin-bottom: 10px;
+            /* Añadido para centrar los iconos horizontalmente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .redes-sociales a {
+            color: white;
+            font-size: 1.5em;
+            /* Tamaño de los íconos */
+            margin: 0 10px;
+            transition: color 0.3s ease;
+            /* Transición suave al pasar el mouse */
+        }
+
+        .redes-sociales a:hover {
+            color: #8BC34A;
+            /* El color verde de tu logo al pasar el mouse */
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#E91E63', /* Magenta de la marca */
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="relative">
+
+    <div id="capa-fondo-atenuante"></div>
+
+    <!-- Mensaje de Notificación Temporal -->
+    <div id="notification-bar"
+        class="fixed top-0 left-0 w-full p-4 text-center text-white font-medium shadow-lg transition-all duration-300 transform -translate-y-full z-50">
+    </div>
+
+    <!-- Encabezado / Navegación -->
+    <header class="bg-gradient-to-r from-pink-50 to-white border-b-2 border-primary/50 shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="logo-container">
+                <!-- LOGO (usando la imagen subida 'hir.jpg') -->
+                <img src="img/hiru-web.png" alt="Logo Hirusta Fibrofacil" class="logo max-h-20"
+                    onerror="this.onerror=null; this.src='https://placehold.co/150x64/E91E63/ffffff?text=LOGO'">
+
+                <h1 class="text-4xl font-bold text-gray-800">
+                    <span class="text-primary">Hirusta</span> Fibrofacil
+                </h1>
+            </div>
+
+            <nav class="flex items-center space-x-6">
+
+                <!-- Botón Carrito -->
+                <button onclick="openCartModal()"
+                    class="relative p-2 rounded-full hover:bg-gray-100 transition duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-700" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-count"
+                        class="absolute top-0 right-0 bg-primary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">0</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Sección de Filtros y Búsqueda -->
+        <section class="mb-10 p-6 bg-white rounded-xl shadow-lg">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Explora Nuestro Catálogo</h2>
+            <div class="flex flex-col md:flex-row gap-4">
+                <input type="text" id="search-input" placeholder="Buscar por nombre o descripción..."
+                    class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+
+                <select id="rubro-filter"
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary md:w-1/4">
+                    <option value="">Todos los Rubros</option>
+                    <!-- Las opciones de rubro se llenarán con JS -->
+                </select>
+
+                <button onclick="applyFilters()"
+                    class="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#C6185D] transition duration-150 shadow-md">
+                    Filtrar
+                </button>
+            </div>
+        </section>
+
+        <!-- Listado de Productos -->
+        <section id="catalogo-productos">
+            <p id="loading-status" class="text-center text-xl text-gray-500">Cargando catálogo...</p>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Las tarjetas de producto se insertarán aquí -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal del Carrito -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Tu Carrito de Compras</h2>
+                <button onclick="closeCartModal()" class="text-gray-500 hover:text-gray-900 transition duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="cart-items" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+                <!-- Artículos del carrito se renderizan aquí -->
+            </div>
+
+            <div id="cart-summary" class="mt-6 pt-4 border-t border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xl font-semibold text-gray-800">Total:</span>
+                    <span id="cart-total" class="text-2xl font-bold text-primary">$0.00</span>
+                </div>
+
+                <button onclick="checkout()"
+                    class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-[#C6185D] transition duration-150 shadow-lg">
+                    Finalizar Compra y Abrir WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Pie de página -->
+    <footer class="text-white mt-12 p-6 text-center">
+        <div class="redes-sociales mb-4">
+            <a href="https://whatsapp.com/channel/0029VasVxQY6xCSKuRPtjw0B" target="_blank"
+                class="mx-3 text-2xl hover:text-indigo-400 transition duration-300"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.facebook.com/HirustaBragado/" target="_blank"
+                class="mx-3 text-2xl hover:text-indigo-400 transition duration-300"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/hirusta_fibrofacil/" target="_blank"
+                class="mx-3 text-2xl hover:text-indigo-400 transition duration-300"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p class="text-sm">© 2025 Hirusta Fibrofacil. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Configuración de la API
+        const API_BASE_URL = 'https://hirusta-api-backend.onrender.com/api/catalogoartic';
+        const IMAGE_BASE_PATH = 'https://hirusta-api-backend.onrender.com';
+        const CART_KEY = 'hirusta_shopping_cart';
+        const WHATSAPP_NUMBER = '5492342511130';
+
+        let fullCatalogo = [];
+
+        // --- FUNCIONES DE UTILIDAD ---
+
+        function showNotification(message, className) {
+            const notificationBar = document.getElementById('notification-bar');
+            notificationBar.textContent = message;
+            notificationBar.className = `fixed top-0 left-0 w-full p-4 text-center text-white font-medium shadow-lg transition-all duration-300 transform -translate-y-full z-50 ${className}`;
+
+            setTimeout(() => {
+                notificationBar.style.transform = 'translateY(0)';
+            }, 10);
+
+            setTimeout(() => {
+                notificationBar.style.transform = 'translateY(-100%)';
+            }, 3000);
+        }
+
+        function handleImageError(imgElement) {
+            imgElement.onerror = null;
+            // Usamos un único placeholder de 400x250 que funciona bien para las tarjetas.
+            imgElement.src = `img/defecto.png`;
+            imgElement.alt = "Imagen no disponible";
+        }
+
+        function normalizeImagePath(path) {
+            if (!path) return '';
+
+            // 1. Reemplazar backslashes de Windows por barras inclinadas
+            let normalized = path.replace(/\\/g, '/');
+
+            // 2. ELIMINAR el prefijo 'public/' del inicio de la ruta
+            const prefix = 'public/';
+            if (normalized.toLowerCase().startsWith(prefix)) {
+                // Esto cambia "public/img/..." a "img/..."
+                normalized = normalized.substring(prefix.length);
+            }
+
+            // 3. Asegurar que la ruta siempre inicie con un solo slash (/)
+            while (normalized.startsWith('/')) {
+                normalized = normalized.substring(1);
+            }
+
+            // Devuelve la ruta limpia (ej: /img/imagen1.jpg)
+            return '/' + normalized;
+        }
+        // --- MANEJO DEL CARRITO (Código sin cambios) ---
+
+        function getCart() {
+            try {
+                const cart = localStorage.getItem(CART_KEY);
+                return cart ? JSON.parse(cart) : [];
+            } catch (e) {
+                console.error("Error al obtener el carrito de localStorage:", e);
+                return [];
+            }
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cart = getCart();
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+        }
+
+        window.addToCart = function (product) {
+            let cart = getCart();
+            const existingItemIndex = cart.findIndex(item => item.id === product.id);
+
+            const productToAdd = {
+                ...product,
+                precio: parseFloat(product.precio) || 0
+            };
+
+
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                cart.push({ ...productToAdd, quantity: 1 });
+            }
+
+            saveCart(cart);
+            showNotification(`"${product.nombre}" añadido al carrito.`, 'bg-primary');
+        }
+
+        window.changeQuantity = function (productId, delta) {
+            let cart = getCart();
+            const item = cart.find(i => i.id === productId);
+
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+                saveCart(cart);
+                renderCart();
+            }
+        }
+
+        function renderCart() {
+            const cart = getCart();
+            const itemsContainer = document.getElementById('cart-items');
+            const totalDisplay = document.getElementById('cart-total');
+            itemsContainer.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = '<p class="text-center text-gray-500 py-4">El carrito está vacío.</p>';
+                totalDisplay.textContent = `$0.00`;
+                return;
+            }
+
+            cart.forEach(item => {
+                const itemPrecio = parseFloat(item.precio) || 0;
+                const itemTotal = itemPrecio * item.quantity;
+                total += itemTotal;
+
+                const itemHTML = `
+                    <div class="flex justify-between items-center p-3 border rounded-lg">
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-gray-800 truncate">${item.nombre}</p>
+                            <p class="text-sm text-gray-600">$${itemPrecio.toFixed(2)} c/u</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="changeQuantity(${item.id}, -1)" class="text-gray-500 hover:text-red-500 p-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+                            </button>
+                            <span class="font-medium text-gray-800 w-5 text-center">${item.quantity}</span>
+                            <button onclick="changeQuantity(${item.id}, 1)" class="text-gray-500 hover:text-primary p-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
+                        <span class="font-bold text-lg w-20 text-right">$${itemTotal.toFixed(2)}</span>
+                    </div>
+                `;
+                itemsContainer.innerHTML += itemHTML;
+            });
+
+            totalDisplay.textContent = `$${total.toFixed(2)}`;
+        }
+
+        window.openCartModal = function () {
+            renderCart();
+            document.getElementById('cart-modal').style.display = 'flex';
+        }
+
+        window.closeCartModal = function () {
+            document.getElementById('cart-modal').style.display = 'none';
+        }
+
+        window.checkout = function () {
+            const cart = getCart();
+            const total = cart.reduce((sum, item) => sum + (parseFloat(item.precio) || 0) * item.quantity, 0);
+
+            if (total === 0) {
+                showNotification('El carrito está vacío. Añade productos para finalizar la compra.', 'bg-yellow-500');
+                return;
+            }
+
+            let message = `¡Hola! Me gustaría hacer un pedido a Hirusta Fibrofacil.\n\n`;
+            message += `*Detalle del Pedido:*\n`;
+
+            cart.forEach(item => {
+                const itemPrecio = (parseFloat(item.precio) || 0).toFixed(2);
+                message += `${item.quantity}x ${item.nombre} - ($${itemPrecio} c/u)\n`;
+            });
+
+            message += `\n*Total a Pagar:* $${total.toFixed(2)}\n`;
+            message += `\n*Datos del Comprador:*\n`;
+            message += `Nombre: [Tu Nombre Aquí]\n`;
+            message += `Dirección para Envío: [Tu Dirección Aquí]\n`;
+            message += `\nPor favor, confírmenme el stock y coordinamos el envío. ¡Gracias!`;
+
+
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+            window.open(whatsappUrl, '_blank');
+
+            showNotification('Redirigiendo a WhatsApp para finalizar la compra. Se ha copiado el detalle.', 'bg-green-600');
+            saveCart([]);
+            closeCartModal();
+        }
+
+        // --- LÓGICA DEL CARRUSEL POR TARJETA ---
+
+        /**
+         * Maneja la navegación del carrusel dentro de una tarjeta de producto específica.
+         * @param {Event} event - El evento click.
+         * @param {string} carouselId - El ID único del contenedor del carrusel (p. ej., 'carousel-1').
+         * @param {number} direction - -1 para anterior, 1 para siguiente.
+         */
+        window.navigateCardCarousel = function (event, carouselId, direction) {
+            // Detiene la propagación para evitar que el click en la flecha afecte al grid o a otros elementos.
+            event.stopPropagation();
+
+            const carouselContainer = document.getElementById(carouselId);
+            if (!carouselContainer) return;
+
+            const images = carouselContainer.querySelectorAll('.product-card-image');
+            const totalImages = images.length;
+
+            let currentIndex = -1;
+
+            // 1. Encontrar el índice de la imagen actualmente visible
+            images.forEach((img, index) => {
+                if (!img.classList.contains('hidden')) {
+                    currentIndex = index;
+                }
+            });
+
+            if (currentIndex === -1 || totalImages === 0) {
+                // Esto no debería pasar si renderizamos correctamente, pero es una protección
+                return;
+            }
+
+            // 2. Calcular el nuevo índice (circular)
+            let newIndex = (currentIndex + direction) % totalImages;
+            if (newIndex < 0) {
+                newIndex = totalImages - 1;
+            }
+
+            // 3. Aplicar la transición de visibilidad
+            images[currentIndex].classList.add('hidden');
+            images[newIndex].classList.remove('hidden');
+        }
+
+
+        // --- RENDERIZADO DEL CATÁLOGO ---
+
+        function renderCatalogo(productos) {
+            const grid = document.getElementById('product-grid');
+            const status = document.getElementById('loading-status');
+            grid.innerHTML = '';
+            status.style.display = 'none';
+
+            if (productos.length === 0) {
+                status.textContent = "No se encontraron productos con los filtros aplicados.";
+                status.style.display = 'block';
+                return;
+            }
+
+            productos.forEach(producto => {
+                const images = producto.imagenes || [];
+                const uniqueCarouselId = `carousel-${producto.id}`;
+                const displayPrecio = (parseFloat(producto.precio) || 0).toFixed(2);
+
+                // Escapar el objeto producto para pasarlo a la función addToCart en HTML
+                const productJsonString = JSON.stringify(producto).replace(/'/g, "\\'");
+
+                let imageCarouselHTML = '';
+
+                if (images.length > 0) {
+                    images.forEach((imagePathFromDB, imgIndex) => {
+                        const sanitizedImagePath = normalizeImagePath(imagePathFromDB);
+                        const imageUrl = sanitizedImagePath
+                            ? IMAGE_BASE_PATH + sanitizedImagePath
+                            : `https://placehold.co/400x250/E91E63/ffffff?text=Imagen+${imgIndex + 1}`;
+
+                        const isFirst = imgIndex === 0 ? '' : 'hidden'; // Solo muestra la primera imagen
+
+                        imageCarouselHTML += `
+                            <img 
+                                src="${imageUrl}" 
+                                alt="${producto.nombre} - Vista ${imgIndex + 1}" 
+                                class="product-card-image absolute top-0 left-0 ${isFirst}"
+                                onerror="handleImageError(this)"
+                            />
+                        `;
+                    });
+                } else {
+                    // Fallback si no hay array de imágenes
+                    imageCarouselHTML += `
+                        <img 
+                            src="img/defecto.png" 
+                            alt="${producto.nombre}" 
+                            class="product-card-image absolute top-0 left-0"
+                            onerror="handleImageError(this)"
+                        />
+                    `;
+                }
+
+
+                const card = `
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transition transform hover:shadow-xl duration-300">
+                        <!-- Contenedor del Carrusel de la Tarjeta -->
+                        <div id="${uniqueCarouselId}" 
+                             class="relative overflow-hidden h-64 group" 
+                             data-img-count="${images.length}">
+                            
+                            ${imageCarouselHTML}
+
+                            <!-- Flechas de Navegación (Solo si hay más de 1 imagen) -->
+                            ${images.length > 1 ? `
+                                <button onclick="navigateCardCarousel(event, '${uniqueCarouselId}', -1)" 
+                                        class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition duration-300 z-30">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                                </button>
+                                <button onclick="navigateCardCarousel(event, '${uniqueCarouselId}', 1)" 
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition duration-300 z-30">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                                </button>
+                            ` : ''}
+
+                            <!-- Etiqueta Rubro -->
+                            <span class="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md z-40">
+                                ${producto.rubro}
+                            </span>
+                        </div>
+                        
+                        <div class="p-5">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">${producto.nombre}</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">${producto.descripcion}</p>
+                            
+                            <div class="flex justify-between items-center mt-4">
+                                <span class="text-2xl font-bold text-gray-900">$${displayPrecio}</span>
+                                <span class="text-sm text-gray-500">Stock: ${producto.unidades_disponibles}</span>
+                            </div>
+
+                            <button onclick='addToCart(${productJsonString})' class="mt-4 w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-[#C6185D] transition duration-150">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        function populateRubroFilter(productos) {
+            const rubroFilter = document.getElementById('rubro-filter');
+            const rubros = [...new Set(productos.map(p => p.rubro).filter(r => r))].sort();
+
+            rubroFilter.innerHTML = '<option value="">Todos los Rubros</option>';
+            rubros.forEach(rubro => {
+                const option = document.createElement('option');
+                option.value = rubro;
+                option.textContent = rubro;
+                rubroFilter.appendChild(option);
+            });
+        }
+
+        // --- FILTRADO Y BÚSQUEDA ---
+
+        window.applyFilters = function () {
+            const searchText = document.getElementById('search-input').value.toLowerCase();
+            const selectedRubro = document.getElementById('rubro-filter').value;
+
+            const filteredProducts = fullCatalogo.filter(producto => {
+                const productRubro = producto.rubro || '';
+                const matchesRubro = !selectedRubro || productRubro === selectedRubro;
+
+                const matchesSearch = !searchText ||
+                    (producto.nombre && producto.nombre.toLowerCase().includes(searchText)) ||
+                    (producto.descripcion && producto.descripcion.toLowerCase().includes(searchText));
+
+                return matchesRubro && matchesSearch;
+            });
+
+            renderCatalogo(filteredProducts);
+        }
+
+        // --- CARGA INICIAL ---
+
+        // --- CARGA INICIAL (VERSIÓN CORREGIDA) ---
+
+        async function fetchCatalogo() {
+            const status = document.getElementById('loading-status');
+            try {
+                const response = await fetch(API_BASE_URL);
+
+                if (!response.ok) {
+                    const errorMessage = `Fallo HTTP: ${response.status} ${response.statusText}. Error al contactar al backend.`;
+                    throw new Error(errorMessage);
+                }
+
+                // 1. Procesar la respuesta JSON
+                const productos = await response.json();
+
+                // 2. Guardar y Renderizar
+                fullCatalogo = productos;
+                populateRubroFilter(productos);
+                renderCatalogo(productos);
+
+                // 3. Ocultar el estado de carga
+                status.style.display = 'none'; // Aseguramos que se oculte
+
+            } catch (error) {
+                console.error("Error al cargar el catálogo:", error);
+                const errorMessage = `Error al cargar el catálogo: ${error.message}.`;
+                status.textContent = errorMessage;
+                status.style.display = 'block';
+            }
+        }
+
+        window.onload = fetchCatalogo;
+
+        // Exportar las funciones de utilidad para que sean accesibles globalmente
+        window.handleImageError = handleImageError;
+        window.normalizeImagePath = normalizeImagePath;
+    </script>
+</body>
+
+</html>
