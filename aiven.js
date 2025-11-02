@@ -43,7 +43,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-
+app.use(express.static('public'));
 // =======================================================
 // 3. CONEXIÓN A LA BASE DE DATOS
 // =======================================================
